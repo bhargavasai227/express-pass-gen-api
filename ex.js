@@ -9,9 +9,9 @@ const db = client.db("numbers");
 const coll = db.collection("pass")
 app.use(cors())
 
-function genPassword() {
+function genPassword(len) {
     var chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    var passwordLength = 10;
+    var passwordLength = len;
     var password = "";
       for (var i = 0; i <= passwordLength; i++) {
          var randomNumber = Math.floor(Math.random() * chars.length);
@@ -29,9 +29,9 @@ function genPassword() {
    return({last:await coll.find({},{"_id":0}).limit(5).sort({_id:-1}).toArray()});
  }
  app.get("/",async function(req,res){
-    const doc = genPassword();
+  len=req.query.len;
+    const doc = genPassword(parseInt(len));
     const last = await find();
-    console.log(last);
     insert(doc);
     
     res.json({doc,last});
